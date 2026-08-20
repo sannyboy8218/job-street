@@ -8,6 +8,7 @@ import {
 } from "@/services/application.service";
 import { getJob, updateJob } from "@/services/job.service";
 import { getUserDisplayName } from "@/utils/user";
+import UserAvatar from "@/components/common/UserAvatar";
 import {
   APPLICATION_STATUSES,
   getApplicationStatusLabel,
@@ -158,18 +159,21 @@ export default function ApplicantsPage() {
                 className="rounded-xl border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <h2 className="text-xl font-semibold">
-                      {getUserDisplayName(application.applicant)}
-                    </h2>
-                    <p className="text-slate-500">
-                      {application.applicant?.email}
-                    </p>
-                    {application.applicant?.phone ? (
+                  <div className="flex items-start gap-4">
+                    <UserAvatar user={application.applicant} size="md" />
+                    <div>
+                      <h2 className="text-xl font-semibold">
+                        {getUserDisplayName(application.applicant)}
+                      </h2>
                       <p className="text-slate-500">
-                        {application.applicant.phone}
+                        {application.applicant?.email}
                       </p>
-                    ) : null}
+                      {application.applicant?.phone ? (
+                        <p className="text-slate-500">
+                          {application.applicant.phone}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
 
                   <div className="flex flex-col items-start gap-2 sm:items-end">

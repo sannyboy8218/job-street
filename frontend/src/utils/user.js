@@ -25,3 +25,21 @@ export function getUserInitials(user) {
     .slice(0, 2)
     .toUpperCase();
 }
+
+export function getAvatarSrc(user) {
+  if (!user?._id) {
+    return "";
+  }
+
+  if (!user.hasAvatar && !user.avatarContentType) {
+    return "";
+  }
+
+  const apiBase =
+    import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+  const version = user.updatedAt
+    ? new Date(user.updatedAt).getTime()
+    : Date.now();
+
+  return `${apiBase}/auth/users/${user._id}/avatar?v=${version}`;
+}

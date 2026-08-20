@@ -29,3 +29,12 @@ export const changePassword = async (payload) => {
 
   return response.data;
 };
+
+export const uploadAvatar = async (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const response = await api.post("/auth/me/avatar", formData);
+
+  return response.data.data;
+};

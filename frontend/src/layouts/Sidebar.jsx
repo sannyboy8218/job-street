@@ -14,7 +14,8 @@ import {
 import Logo from "@/components/common/Logo";
 import ThemeToggle from "@/components/common/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
-import { getUserDisplayName, getUserInitials } from "@/utils/user";
+import { getUserDisplayName } from "@/utils/user";
+import UserAvatar from "@/components/common/UserAvatar";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ export default function Sidebar() {
     navigate("/login");
   };
 
-  const initials = getUserInitials(user);
   const displayName = getUserDisplayName(user);
 
   const employerLinks = [
@@ -90,9 +90,7 @@ export default function Sidebar() {
 
       <div className="border-b px-6 py-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
-            {initials}
-          </div>
+          <UserAvatar user={user} size="md" />
 
           <div>
             <p className="font-semibold text-slate-800 dark:text-slate-100">{displayName}</p>

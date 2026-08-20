@@ -11,6 +11,7 @@ import { profileSchema } from "@/validations/profile.schema";
 
 import PageHeader from "@/components/common/PageHeader";
 import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
+import ProfilePhotoCard from "@/components/profile/ProfilePhotoCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -89,6 +90,12 @@ export default function ProfilePage() {
             : "Update your contact details and resume link."
         }
       />
+
+      <Card className="border-0 shadow-lg">
+        <CardContent className="pt-8">
+          <ProfilePhotoCard />
+        </CardContent>
+      </Card>
 
       <Card className="border-0 shadow-lg">
         <CardContent className="pt-8">
