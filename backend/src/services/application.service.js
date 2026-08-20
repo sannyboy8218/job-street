@@ -4,6 +4,12 @@ import Job from "../models/job.model.js";
 import BadRequestError from "../errors/BadRequestError.js";
 import NotFoundError from "../errors/NotFoundError.js";
 import ForbiddenError from "../errors/ForbiddenError.js";
+import { createNotification } from "./notification.service.js";
+import {
+  buildApplicationReceivedMessage,
+  buildStatusUpdatedMessage,
+  getApplicantDisplayName,
+} from "../utils/notificationMessages.js";
 
 export const applyToJob = async (
   applicantId,
@@ -41,6 +47,21 @@ export const applyToJob = async (
     resume,
   });
 
+  await application.populate("applicant", "firstName lastName");
+
+  await createNotification({
+    recipient: job.createdBy,
+    type: "APPLICATION_RECEIVED",
+    title: "New application",
+    message: buildApplicationReceivedMessage(
+      getApplicantDisplayName(application.applicant),
+      job.title
+    ),
+    link: `/employer/jobs/${job._id}/applicants`,
+    job: job._id,
+    application: application._id,
+  });
+
   return application;
 };
 
@@ -60,7 +81,7 @@ export const getApplicantsByJob = async (employerId, jobId) => {
   const applications = await Application.find({
     job: jobId,
   })
-    .populate("applicant", "firstName lastName email phone resumeUrl")
+    .populate("applicant", "firstName lastName email phone resumeUrl avatarContentType")
     .sort({
       createdAt: -1,
     });
@@ -99,10 +120,25 @@ export const updateApplicationStatus = async (
     );
   }
 
+  const applicantId = application.applicant;
+  const statusChanged = application.status !== status;
+
   application.status = status;
   await application.save();
 
-  await application.populate("applicant", "firstName lastName email phone resumeUrl");
+  await application.populate("applicant", "firstName lastName email phone resumeUrl avatarContentType");
+
+  if (statusChanged) {
+    await createNotification({
+      recipient: applicantId,
+      type: "APPLICATION_STATUS_UPDATED",
+      title: "Application update",
+      message: buildStatusUpdatedMessage(application.job.title, status),
+      link: "/jobseeker/applications",
+      job: application.job._id,
+      application: application._id,
+    });
+  }
 
   return application;
 };
