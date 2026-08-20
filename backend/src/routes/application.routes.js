@@ -3,7 +3,7 @@ import express from "express";
 import authenticate from "../middleware/auth.middleware.js";
 import authorize from "../middleware/authorize.middleware.js";
 import validate from "../middleware/validate.js";
-import { updateApplicationStatusSchema } from "../validations/application.validation.js";
+import { updateApplicationStatusSchema, applyToJobSchema } from "../validations/application.validation.js";
 
 import * as applicationController from "../controllers/application.controller.js";
 
@@ -13,6 +13,7 @@ router.post(
   "/",
   authenticate,
   authorize("JOB_SEEKER"),
+  validate(applyToJobSchema),
   applicationController.applyToJob
 );
 
