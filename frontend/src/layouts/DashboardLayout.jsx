@@ -15,7 +15,7 @@ export default function DashboardLayout() {
       <Sidebar />
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        {showGreeting ? <TopNavbar /> : null}
+        <TopNavbar showGreeting={showGreeting} />
 
         <main className="flex-1 overflow-y-auto p-8">
           <Outlet />

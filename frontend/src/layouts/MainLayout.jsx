@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getDashboardPath } from "@/constants/roles";
 import hirehubLogo from "@/assets/hirehub-icon.png";
 import ThemeToggle from "@/components/common/ThemeToggle";
+import NotificationBell from "@/components/common/NotificationBell";
 
 export default function MainLayout() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -47,6 +48,7 @@ export default function MainLayout() {
                 >
                   Log out
                 </button>
+                <NotificationBell />
               </>
             ) : (
               <>
