@@ -5,9 +5,6 @@ import BadRequestError from "../errors/BadRequestError.js";
 import NotFoundError from "../errors/NotFoundError.js";
 import ForbiddenError from "../errors/ForbiddenError.js";
 
-/**
- * Apply for a job
- */
 export const applyToJob = async (
   applicantId,
   jobId,
@@ -18,6 +15,12 @@ export const applyToJob = async (
 
   if (!job) {
     throw new NotFoundError("Job not found.");
+  }
+
+  if (job.status !== "OPEN") {
+    throw new BadRequestError(
+      "This job is no longer accepting applications."
+    );
   }
 
   const existingApplication = await Application.findOne({
@@ -41,20 +44,14 @@ export const applyToJob = async (
   return application;
 };
 
-/**
- * Employer views applicants for one job
- */
-export const getApplicantsByJob = async (
-  employerId,
-  jobId
-) => {
+export const getApplicantsByJob = async (employerId, jobId) => {
   const job = await Job.findById(jobId);
 
   if (!job) {
     throw new NotFoundError("Job not found.");
   }
 
-  if (job.createdBy.toString() !== employerId) {
+  if (job.createdBy.toString() !== String(employerId)) {
     throw new ForbiddenError(
       "You are not allowed to view these applicants."
     );
@@ -63,7 +60,7 @@ export const getApplicantsByJob = async (
   const applications = await Application.find({
     job: jobId,
   })
-    .populate("applicant", "name email")
+    .populate("applicant", "firstName lastName email phone resumeUrl")
     .sort({
       createdAt: -1,
     });
@@ -71,5 +68,41 @@ export const getApplicantsByJob = async (
   return applications;
 };
 
+export const getMyApplications = async (applicantId) => {
+  return await Application.find({
+    applicant: applicantId,
+  })
+    .populate("job")
+    .sort({
+      createdAt: -1,
+    });
+};
 
+export const updateApplicationStatus = async (
+  employerId,
+  applicationId,
+  status
+) => {
+  const application = await Application.findById(applicationId).populate("job");
 
+  if (!application) {
+    throw new NotFoundError("Application not found.");
+  }
+
+  if (!application.job) {
+    throw new NotFoundError("Job not found.");
+  }
+
+  if (application.job.createdBy.toString() !== String(employerId)) {
+    throw new ForbiddenError(
+      "You are not allowed to update this application."
+    );
+  }
+
+  application.status = status;
+  await application.save();
+
+  await application.populate("applicant", "firstName lastName email phone resumeUrl");
+
+  return application;
+};

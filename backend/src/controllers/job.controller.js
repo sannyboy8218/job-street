@@ -1,5 +1,9 @@
 import * as jobService from "../services/job.service.js";
-import { createJobSchema } from "../validations/job.validation.js";
+import {
+  createJobSchema,
+  updateJobSchema,
+  publicJobQuerySchema,
+} from "../validations/job.validation.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 export const createJob = asyncHandler(async (req, res) => {
@@ -27,7 +31,7 @@ export const getEmployerJobs = asyncHandler(async (req, res) => {
 });
 
 export const getJob = asyncHandler(async (req, res) => {
-  const job = await jobService.getJobById(req.params.id);
+  const job = await jobService.getJobById(req.params.id, req.user.id);
 
   if (!job) {
     return res.status(404).json({
@@ -43,10 +47,11 @@ export const getJob = asyncHandler(async (req, res) => {
 });
 
 export const updateJob = asyncHandler(async (req, res) => {
-  const validatedData = createJobSchema.parse(req.body);
+  const validatedData = updateJobSchema.parse(req.body);
 
   const job = await jobService.updateJob(
     req.params.id,
+    req.user.id,
     validatedData
   );
 
@@ -65,7 +70,7 @@ export const updateJob = asyncHandler(async (req, res) => {
 });
 
 export const deleteJob = asyncHandler(async (req, res) => {
-  const job = await jobService.deleteJob(req.params.id);
+  const job = await jobService.deleteJob(req.params.id, req.user.id);
 
   if (!job) {
     return res.status(404).json({
@@ -85,7 +90,20 @@ export const deleteJob = asyncHandler(async (req, res) => {
  */
 
 export const getPublicJobs = asyncHandler(async (req, res) => {
-  const jobs = await jobService.getPublicJobs();
+  const parsed = publicJobQuerySchema.safeParse({
+    search: req.query.search || undefined,
+    location: req.query.location || undefined,
+    employmentType: req.query.employmentType || undefined,
+  });
+
+  if (!parsed.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid search filters.",
+    });
+  }
+
+  const jobs = await jobService.getPublicJobs(parsed.data);
 
   res.status(200).json({
     success: true,

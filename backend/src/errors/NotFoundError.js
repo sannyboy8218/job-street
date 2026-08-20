@@ -1,9 +1,9 @@
 import AppError from "./AppError.js";
 
-class ConflictError extends AppError {
-  constructor(message = "Conflict") {
-    super(message, 409);
+class NotFoundError extends AppError {
+  constructor(message = "Not Found") {
+    super(message, 404);
   }
 }
 
-export default ConflictError;
+export default NotFoundError;

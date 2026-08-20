@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "node --test src/utils/publicJobQuery.test.js src/utils/applicationReportQuery.test.js src/validations/application.validation.test.js src/validations/profile.validation.test.js src/validations/password.validation.test.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",

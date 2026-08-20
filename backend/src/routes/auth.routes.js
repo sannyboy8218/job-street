@@ -5,8 +5,13 @@ import { register } from "../controllers/auth.controller.js";
 import { login } from "../controllers/auth.controller.js";
 import { loginSchema } from "../validators/login.validator.js"
 import authenticate from "../middleware/auth.middleware.js";
-import { getCurrentUser } from "../controllers/auth.controller.js";
-import authorize from "../middleware/authorize.middleware.js";
+import {
+  getCurrentUser,
+  updateProfile,
+  changePassword,
+} from "../controllers/auth.controller.js";
+import { updateProfileSchema } from "../validations/profile.validation.js";
+import { changePasswordSchema } from "../validations/password.validation.js";
 
 const router = express.Router();
 
@@ -25,6 +30,20 @@ router.get(
   "/me",
   authenticate,
   getCurrentUser
+);
+
+router.patch(
+  "/me",
+  authenticate,
+  validate(updateProfileSchema),
+  updateProfile
+);
+
+router.patch(
+  "/password",
+  authenticate,
+  validate(changePasswordSchema),
+  changePassword
 );
 
 

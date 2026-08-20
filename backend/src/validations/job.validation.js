@@ -34,3 +34,15 @@ export const createJobSchema = z.object({
     .string()
     .min(10, "Requirements must be at least 10 characters."),
 });
+
+export const updateJobSchema = createJobSchema.extend({
+  status: z.enum(["OPEN", "CLOSED"]),
+});
+
+export const publicJobQuerySchema = z.object({
+  search: z.string().trim().max(100).optional(),
+  location: z.string().trim().max(100).optional(),
+  employmentType: z
+    .enum(["FULL_TIME", "PART_TIME", "CONTRACT", "INTERNSHIP"])
+    .optional(),
+});

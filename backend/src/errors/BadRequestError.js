@@ -1,9 +1,9 @@
 import AppError from "./AppError.js";
 
-class UnauthorizedError extends AppError {
-  constructor(message = "Unauthorized") {
-    super(message, 401);
+class BadRequestError extends AppError {
+  constructor(message = "Bad Request") {
+    super(message, 400);
   }
 }
 
-export default UnauthorizedError;
+export default BadRequestError;

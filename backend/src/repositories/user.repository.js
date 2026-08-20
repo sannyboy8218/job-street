@@ -10,8 +10,22 @@ const findByEmail = async (email) => {
 const findById = async (id) => {
   return await User.findById(id).select("-password");
 };
+
+const findByIdWithPassword = async (id) => {
+  return await User.findById(id);
+};
+
+const updateById = async (id, data) => {
+  return await User.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  }).select("-password");
+};
+
 export default {
   create,
   findByEmail,
-  findById
+  findById,
+  findByIdWithPassword,
+  updateById,
 };

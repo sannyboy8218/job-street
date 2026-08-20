@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import userRepository from "../repositories/user.repository.js";
 import ConflictError from "../errors/ConflictError.js";
 import UnauthorizedError from "../errors/UnauthorizedError.js";
+import BadRequestError from "../errors/BadRequestError.js";
 import { generateAccessToken } from "../utils/jwt.js";
 
 
@@ -69,6 +70,48 @@ const getCurrentUser = async (userId) => {
   return user;
 };
 
+const updateProfile = async (userId, profileData) => {
+  const user = await userRepository.updateById(userId, profileData);
+
+  if (!user) {
+    throw new UnauthorizedError("User not found");
+  }
+
+  return user;
+};
+
+const changePassword = async (userId, { currentPassword, newPassword }) => {
+  const user = await userRepository.findByIdWithPassword(userId);
+
+  if (!user) {
+    throw new UnauthorizedError("User not found");
+  }
+
+  const isCurrentValid = await bcrypt.compare(
+    currentPassword,
+    user.password
+  );
+
+  if (!isCurrentValid) {
+    throw new BadRequestError("Current password is incorrect.");
+  }
+
+  const isSamePassword = await bcrypt.compare(newPassword, user.password);
+
+  if (isSamePassword) {
+    throw new BadRequestError(
+      "New password must be different from the current password."
+    );
+  }
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
+};
+
 export default {
-  register,login,getCurrentUser
+  register,
+  login,
+  getCurrentUser,
+  updateProfile,
+  changePassword,
 };
