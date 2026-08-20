@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import ApplicationStatusBadge from "@/components/jobs/ApplicationStatusBadge";
+import { applySchema } from "@/validations/apply.schema";
 
 export default function JobDetailsPage() {
   const { id } = useParams();
@@ -31,6 +32,7 @@ export default function JobDetailsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [loadError, setLoadError] = useState("");
   const [existingApplication, setExistingApplication] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const resume = resumeOverride ?? user?.resumeUrl ?? "";
 
@@ -76,13 +78,34 @@ export default function JobDetailsPage() {
   const handleApply = async (event) => {
     event.preventDefault();
 
+    const parsed = applySchema.safeParse({
+      coverLetter,
+      resume,
+    });
+
+    if (!parsed.success) {
+      const nextErrors = {};
+
+      parsed.error.issues.forEach((issue) => {
+        const field = issue.path[0];
+        if (field && !nextErrors[field]) {
+          nextErrors[field] = issue.message;
+        }
+      });
+
+      setFieldErrors(nextErrors);
+      return;
+    }
+
+    setFieldErrors({});
+
     try {
       setSubmitting(true);
 
       const response = await applyToJob({
         jobId: job._id,
-        coverLetter,
-        resume,
+        coverLetter: parsed.data.coverLetter,
+        resume: parsed.data.resume,
       });
 
       setExistingApplication(response.data);
@@ -197,26 +220,56 @@ export default function JobDetailsPage() {
         ) : (
           <form onSubmit={handleApply} className="space-y-4">
             <div>
-              <Label htmlFor="coverLetter">Cover letter</Label>
+              <Label htmlFor="coverLetter">Cover letter *</Label>
               <textarea
                 id="coverLetter"
-                className="mt-2 w-full rounded-lg border p-3"
+                className="mt-2 w-full rounded-lg border p-3 dark:border-slate-700 dark:bg-slate-950"
                 rows={6}
                 placeholder="Tell the employer why you are a good fit."
                 value={coverLetter}
-                onChange={(event) => setCoverLetter(event.target.value)}
+                onChange={(event) => {
+                  setCoverLetter(event.target.value);
+                  setFieldErrors((current) => ({
+                    ...current,
+                    coverLetter: "",
+                  }));
+                }}
               />
+              {fieldErrors.coverLetter ? (
+                <p className="mt-1 text-sm text-red-500">
+                  {fieldErrors.coverLetter}
+                </p>
+              ) : (
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  At least 20 characters.
+                </p>
+              )}
             </div>
 
             <div>
-              <Label htmlFor="resume">Resume link</Label>
+              <Label htmlFor="resume">Resume link *</Label>
               <input
                 id="resume"
-                className="mt-2 w-full rounded-lg border p-3"
+                className="mt-2 w-full rounded-lg border p-3 dark:border-slate-700 dark:bg-slate-950"
                 placeholder="https://..."
                 value={resume}
-                onChange={(event) => setResumeOverride(event.target.value)}
+                onChange={(event) => {
+                  setResumeOverride(event.target.value);
+                  setFieldErrors((current) => ({
+                    ...current,
+                    resume: "",
+                  }));
+                }}
               />
+              {fieldErrors.resume ? (
+                <p className="mt-1 text-sm text-red-500">
+                  {fieldErrors.resume}
+                </p>
+              ) : (
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  Paste a public link (Google Drive, Dropbox, or similar).
+                </p>
+              )}
             </div>
 
             <Button
