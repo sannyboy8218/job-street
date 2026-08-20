@@ -142,7 +142,7 @@ export default function JobForm({
             <div>
               <Label htmlFor="salary">Salary</Label>
               <div className="relative mt-2">
-                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500">
+                <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500 dark:text-slate-400">
                   ₱
                 </span>
                 <Input

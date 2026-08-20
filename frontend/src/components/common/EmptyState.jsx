@@ -8,7 +8,7 @@ export default function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center py-20">
       <FileText
-        className="text-gray-400"
+        className="text-gray-400 dark:text-slate-500"
         size={60}
       />
 
@@ -16,7 +16,7 @@ export default function EmptyState({
         {title}
       </h2>
 
-      <p className="mt-2 text-gray-500">
+      <p className="mt-2 text-gray-500 dark:text-slate-400">
         {description}
       </p>
 

@@ -100,7 +100,7 @@ export default function JobDetailsPage() {
 
   if (loadError) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         {loadError}
       </div>
     );
@@ -116,7 +116,7 @@ export default function JobDetailsPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
+      <div className="rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold">{job.title}</h1>
@@ -144,21 +144,21 @@ export default function JobDetailsPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
+      <div className="rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <h2 className="mb-4 text-xl font-semibold">Job Description</h2>
         <p className="leading-7 whitespace-pre-wrap text-slate-600">
           {job.description}
         </p>
       </div>
 
-      <div className="rounded-2xl border bg-white p-8 shadow-sm">
+      <div className="rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <h2 className="mb-4 text-xl font-semibold">Requirements</h2>
         <p className="leading-7 whitespace-pre-wrap text-slate-600">
           {job.requirements}
         </p>
       </div>
 
-      <div className="space-y-5 rounded-2xl border bg-white p-8 shadow-sm">
+      <div className="space-y-5 rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <h2 className="text-xl font-semibold">Apply for this job</h2>
 
         {!isAuthenticated ? (

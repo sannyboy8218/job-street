@@ -124,7 +124,7 @@ export default function ApplicantsPage() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         {error}
       </div>
     );
@@ -142,7 +142,7 @@ export default function ApplicantsPage() {
       </div>
 
       {applications.length === 0 ? (
-        <div className="rounded-xl border bg-white p-8 text-center text-slate-500">
+        <div className="rounded-xl border bg-white p-8 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           No applicants yet.
         </div>
       ) : (
@@ -155,7 +155,7 @@ export default function ApplicantsPage() {
             return (
               <div
                 key={application._id}
-                className="rounded-xl border bg-white p-6 shadow-sm"
+                className="rounded-xl border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div>
@@ -184,7 +184,7 @@ export default function ApplicantsPage() {
                       </Label>
                       <select
                         id={`status-${application._id}`}
-                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
                         value={application.status}
                         disabled={updatingId === application._id}
                         onChange={(event) =>
@@ -205,7 +205,7 @@ export default function ApplicantsPage() {
                 </div>
 
                 {isAccepted ? (
-                  <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-900">
+                  <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-900 dark:border-green-900 dark:bg-green-950/40 dark:text-green-200">
                     <p className="font-semibold">Accepted — next step</p>
                     <p className="mt-1">
                       Contact this applicant by email

@@ -38,7 +38,7 @@ export default function JobSeekerDashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-72 items-center justify-center text-slate-500">
+      <div className="flex h-72 items-center justify-center text-slate-500 dark:text-slate-400">
         Loading dashboard...
       </div>
     );
@@ -46,7 +46,7 @@ export default function JobSeekerDashboard() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         {error}
       </div>
     );
@@ -68,7 +68,7 @@ export default function JobSeekerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Applications</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Applications</p>
               <h2 className="mt-2 text-3xl font-bold">{applications.length}</h2>
             </div>
             <FileText className="text-blue-600" size={36} />
@@ -78,7 +78,7 @@ export default function JobSeekerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Pending</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Pending</p>
               <h2 className="mt-2 text-3xl font-bold">{pendingCount}</h2>
             </div>
             <Clock className="text-amber-600" size={36} />
@@ -88,7 +88,7 @@ export default function JobSeekerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">In progress</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">In progress</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {applications.length - pendingCount}
               </h2>
@@ -109,7 +109,7 @@ export default function JobSeekerDashboard() {
         </CardHeader>
         <CardContent>
           {recentApplications.length === 0 ? (
-            <p className="py-8 text-center text-slate-500">
+            <p className="py-8 text-center text-slate-500 dark:text-slate-400">
               You have not applied to any jobs yet.
             </p>
           ) : (
@@ -117,7 +117,7 @@ export default function JobSeekerDashboard() {
               {recentApplications.map((application) => (
                 <div
                   key={application._id}
-                  className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-3 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-700"
                 >
                   <div>
                     <h3 className="font-semibold">

@@ -15,6 +15,7 @@ import { getDashboardPath } from "@/constants/roles";
 import { loginSchema } from "@/validations/login.schema";
 
 import hirehubLogo from "@/assets/hirehub-icon.png";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 export default function LoginPage() {
   const { login, isAuthenticated, user, loading } = useAuth();
@@ -56,7 +57,7 @@ export default function LoginPage() {
 
   if (loading || isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
         Loading...
       </div>
     );
@@ -66,31 +67,34 @@ export default function LoginPage() {
     <div className="grid min-h-screen lg:grid-cols-2">
       <LoginBrandPanel />
 
-      <div className="flex items-center justify-center bg-slate-50 px-4 py-10 sm:px-6">
-        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="relative flex items-center justify-center bg-slate-50 px-4 py-10 sm:px-6 dark:bg-slate-950">
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
+        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img
               src={hirehubLogo}
               alt=""
               className="h-10 w-10 object-contain"
             />
-            <p className="text-xl font-bold tracking-tight text-slate-900">
+            <p className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
               HireHub
             </p>
           </div>
 
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
             Sign in
           </h1>
 
-          <p className="mt-2 text-sm text-slate-500 sm:text-base">
+          <p className="mt-2 text-sm text-slate-500 sm:text-base dark:text-slate-400">
             Enter your email and password to access HireHub.
           </p>
 
           {apiError ? (
             <div
               role="alert"
-              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300"
             >
               {apiError}
             </div>

@@ -6,7 +6,7 @@ export default function JobSummary({
   return (
     <Card className="p-5">
 
-      <h3 className="text-sm text-gray-500">
+      <h3 className="text-sm text-gray-500 dark:text-slate-400">
         Total Jobs
       </h3>
 

@@ -137,7 +137,7 @@ export default function ProfilePage() {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                className="mt-2 bg-slate-50"
+                className="mt-2 bg-slate-50 dark:bg-slate-800"
                 value={user?.email || ""}
                 disabled
                 readOnly

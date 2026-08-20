@@ -128,7 +128,7 @@ export default function EmployerReportsPage() {
 
       <form
         onSubmit={handleGenerate}
-        className="grid gap-4 rounded-xl border bg-white p-4 md:grid-cols-[repeat(4,minmax(0,1fr))_auto]"
+        className="grid gap-4 rounded-xl border bg-white p-4 md:grid-cols-[repeat(4,minmax(0,1fr))_auto] dark:border-slate-700 dark:bg-slate-900"
       >
         <div>
           <Label htmlFor="from">From</Label>
@@ -193,17 +193,17 @@ export default function EmployerReportsPage() {
           Loading report...
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
           {error}
         </div>
       ) : rows.length === 0 ? (
-        <div className="rounded-xl border bg-white p-8 text-center text-slate-500">
+        <div className="rounded-xl border bg-white p-8 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           No applications in this date range.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border bg-white">
+        <div className="overflow-x-auto rounded-xl border bg-white dark:border-slate-700 dark:bg-slate-900">
           <table className="min-w-full text-left text-sm">
-            <thead className="border-b bg-slate-50 text-slate-600">
+            <thead className="border-b bg-slate-50 text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
               <tr>
                 <th className="px-4 py-3 font-medium">Applicant</th>
                 <th className="px-4 py-3 font-medium">Email</th>

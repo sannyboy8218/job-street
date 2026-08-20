@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
   return (
-    <div className="rounded-2xl border bg-white px-6 py-16 text-center shadow-sm">
+    <div className="rounded-2xl border bg-white px-6 py-16 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
       <p className="text-sm font-semibold text-blue-600">404</p>
       <h1 className="mt-2 text-3xl font-bold">Page not found</h1>
-      <p className="mt-3 text-slate-500">
+      <p className="mt-3 text-slate-500 dark:text-slate-400">
         That page does not exist or may have been moved.
       </p>
       <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

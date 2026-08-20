@@ -39,7 +39,7 @@ export default function ConfirmDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <button
         type="button"
-        className="absolute inset-0 bg-slate-900/40"
+        className="absolute inset-0 bg-slate-900/40 dark:bg-black/60"
         aria-label="Close dialog"
         disabled={confirming}
         onClick={onCancel}
@@ -50,14 +50,14 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-description"
-        className="relative w-full max-w-md rounded-2xl border bg-white p-6 shadow-xl"
+        className="relative w-full max-w-md rounded-2xl border bg-white p-6 shadow-xl dark:border-slate-700 dark:bg-slate-900"
       >
         <h2 id="confirm-dialog-title" className="text-xl font-semibold">
           {title}
         </h2>
         <p
           id="confirm-dialog-description"
-          className="mt-2 text-sm leading-6 text-slate-600"
+          className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300"
         >
           {description}
         </p>

@@ -9,7 +9,7 @@ export default function SearchBar({
     <div className="relative">
 
       <Search
-        className="absolute left-3 top-3 text-gray-400"
+        className="absolute top-3 left-3 text-gray-400 dark:text-slate-500"
         size={18}
       />
 

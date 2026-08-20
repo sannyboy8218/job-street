@@ -16,6 +16,7 @@ import { registerSchema } from "@/validations/register.schema";
 import * as authService from "@/services/auth.service";
 
 import hirehubLogo from "@/assets/hirehub-icon.png";
+import ThemeToggle from "@/components/common/ThemeToggle";
 
 function getErrorMessage(error) {
   const data = error.response?.data;
@@ -83,7 +84,7 @@ export default function RegisterPage() {
 
   if (loading || isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
         Loading...
       </div>
     );
@@ -93,31 +94,34 @@ export default function RegisterPage() {
     <div className="grid min-h-screen lg:grid-cols-2">
       <LoginBrandPanel />
 
-      <div className="flex min-h-screen items-center justify-center overflow-y-auto bg-slate-50 px-4 py-10 sm:px-6">
-        <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="relative flex min-h-screen items-center justify-center overflow-y-auto bg-slate-50 px-4 py-10 sm:px-6 dark:bg-slate-950">
+        <div className="absolute top-4 right-4">
+          <ThemeToggle />
+        </div>
+        <div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img
               src={hirehubLogo}
               alt=""
               className="h-10 w-10 object-contain"
             />
-            <p className="text-xl font-bold tracking-tight text-slate-900">
+            <p className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-50">
               HireHub
             </p>
           </div>
 
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl dark:text-slate-50">
             Create an account
           </h1>
 
-          <p className="mt-2 text-sm text-slate-500 sm:text-base">
+          <p className="mt-2 text-sm text-slate-500 sm:text-base dark:text-slate-400">
             Join HireHub as a job seeker or an employer.
           </p>
 
           {apiError ? (
             <div
               role="alert"
-              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300"
             >
               {apiError}
             </div>
@@ -139,11 +143,11 @@ export default function RegisterPage() {
                   }
                   className={`rounded-xl border px-4 py-3 text-left transition ${
                     selectedRole === ROLES.JOB_SEEKER
-                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20"
-                      : "border-slate-200 hover:border-slate-300"
+                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20 dark:bg-blue-950/50"
+                      : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-500"
                   }`}
                 >
-                  <span className="flex items-center gap-2 font-semibold text-slate-900">
+                  <span className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
                     <UserRound size={18} aria-hidden="true" />
                     Job seeker
                   </span>
@@ -159,11 +163,11 @@ export default function RegisterPage() {
                   }
                   className={`rounded-xl border px-4 py-3 text-left transition ${
                     selectedRole === ROLES.EMPLOYER
-                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20"
-                      : "border-slate-200 hover:border-slate-300"
+                      ? "border-blue-600 bg-blue-50 ring-2 ring-blue-600/20 dark:bg-blue-950/50"
+                      : "border-slate-200 hover:border-slate-300 dark:border-slate-700 dark:hover:border-slate-500"
                   }`}
                 >
-                  <span className="flex items-center gap-2 font-semibold text-slate-900">
+                  <span className="flex items-center gap-2 font-semibold text-slate-900 dark:text-slate-50">
                     <BriefcaseBusiness size={18} aria-hidden="true" />
                     Employer
                   </span>

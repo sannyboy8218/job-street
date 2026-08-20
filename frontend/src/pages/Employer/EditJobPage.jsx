@@ -77,7 +77,7 @@ export default function EditJobPage() {
 
   if (error || !job) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         {error || "Job not found."}
       </div>
     );

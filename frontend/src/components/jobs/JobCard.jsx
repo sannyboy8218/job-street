@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 export default function JobCard({ job }) {
   return (
-    <div className="rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-lg">
+    <div className="rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-lg dark:border-slate-700 dark:bg-slate-900">
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-xl font-bold">

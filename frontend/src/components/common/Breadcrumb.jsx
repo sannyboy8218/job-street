@@ -2,7 +2,7 @@ import { ChevronRight } from "lucide-react";
 
 export default function Breadcrumb({ items }) {
   return (
-    <nav className="flex items-center text-sm text-gray-500 mb-6">
+    <nav className="mb-6 flex items-center text-sm text-gray-500 dark:text-slate-400">
       {items.map((item, index) => (
         <div
           key={item.label}

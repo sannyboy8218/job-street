@@ -29,7 +29,7 @@ export default function MyApplicationsPage() {
 
   if (loading) {
     return (
-      <div className="flex h-72 items-center justify-center text-slate-500">
+      <div className="flex h-72 items-center justify-center text-slate-500 dark:text-slate-400">
         Loading applications...
       </div>
     );
@@ -37,7 +37,7 @@ export default function MyApplicationsPage() {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         {error}
       </div>
     );
@@ -53,7 +53,7 @@ export default function MyApplicationsPage() {
       </div>
 
       {applications.length === 0 ? (
-        <div className="rounded-xl border bg-white p-8 text-center">
+        <div className="rounded-xl border bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
           <p className="text-slate-500">You have not applied to any jobs yet.</p>
           <Link
             to="/jobs"
@@ -70,7 +70,7 @@ export default function MyApplicationsPage() {
             return (
               <div
                 key={application._id}
-                className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-slate-700 dark:bg-slate-900"
               >
                 <div>
                   <h2 className="text-xl font-semibold">

@@ -46,7 +46,7 @@ export default function EmployerDashboard() {
   if (loading) {
     return (
       <div className="flex h-96 items-center justify-center">
-        <p className="text-lg text-slate-500">
+        <p className="text-lg text-slate-500 dark:text-slate-400">
           Loading dashboard...
         </p>
       </div>
@@ -55,7 +55,7 @@ export default function EmployerDashboard() {
 
   if (!dashboard) {
     return (
-      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
         Could not load dashboard.
       </div>
     );
@@ -76,7 +76,7 @@ export default function EmployerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Total Jobs</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Total Jobs</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {dashboard.totalJobs}
               </h2>
@@ -92,7 +92,7 @@ export default function EmployerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Active Jobs</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Active Jobs</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {dashboard.activeJobs}
               </h2>
@@ -108,7 +108,7 @@ export default function EmployerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Closed Jobs</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Closed Jobs</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {dashboard.closedJobs}
               </h2>
@@ -124,7 +124,7 @@ export default function EmployerDashboard() {
         <Card>
           <CardContent className="flex items-center justify-between pt-6">
             <div>
-              <p className="text-sm text-slate-500">Applicants</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Applicants</p>
               <h2 className="mt-2 text-3xl font-bold">
                 {dashboard.totalApplicants}
               </h2>
@@ -162,7 +162,7 @@ export default function EmployerDashboard() {
 
           {dashboard.recentJobs.length === 0 ? (
 
-            <div className="py-10 text-center text-slate-500">
+            <div className="py-10 text-center text-slate-500 dark:text-slate-400">
               No jobs found.
             </div>
 
@@ -174,7 +174,7 @@ export default function EmployerDashboard() {
 
                 <div
                   key={job._id}
-                  className="flex items-center justify-between rounded-lg border p-4 transition hover:bg-slate-50"
+                  className="flex items-center justify-between rounded-lg border p-4 transition hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
                 >
 
                   <div>
@@ -182,7 +182,7 @@ export default function EmployerDashboard() {
                       {job.title}
                     </h3>
 
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {job.company}
                     </p>
                   </div>

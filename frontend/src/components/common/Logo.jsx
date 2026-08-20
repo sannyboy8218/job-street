@@ -21,7 +21,7 @@ export default function Logo() {
 
       {/* Text */}
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
           HireHub
         </h1>
 

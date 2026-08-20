@@ -22,13 +22,13 @@ export default function TopNavbar() {
       : "Ready to find your next opportunity?";
 
   return (
-    <header className="sticky top-0 z-20 border-b bg-white">
+    <header className="sticky top-0 z-20 border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
       <div className="flex h-20 items-center px-8">
         <div>
           <h1 className="text-2xl font-bold">
             {greeting}, {firstName}
           </h1>
-          <p className="text-sm text-slate-500">{subtitle}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{subtitle}</p>
         </div>
       </div>
     </header>

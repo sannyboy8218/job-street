@@ -58,10 +58,10 @@ export default function LandingPage() {
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
           <Search className="text-blue-600" size={28} />
           <h2 className="mt-4 text-2xl font-bold">For job seekers</h2>
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
             Browse open roles, apply with a cover letter, and track your
             application status.
           </p>
@@ -73,10 +73,10 @@ export default function LandingPage() {
           </Link>
         </div>
 
-        <div className="rounded-2xl border bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
           <Building2 className="text-blue-600" size={28} />
           <h2 className="mt-4 text-2xl font-bold">For employers</h2>
-          <p className="mt-2 text-slate-500">
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
             Post jobs, review applicants, and update hiring status in one
             place.
           </p>
@@ -89,10 +89,10 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white p-8 text-center shadow-sm">
+      <section className="rounded-2xl border bg-white p-8 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">
         <BriefcaseBusiness className="mx-auto text-blue-600" size={32} />
         <h2 className="mt-4 text-2xl font-bold">Ready to get started?</h2>
-        <p className="mt-2 text-slate-500">
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Open roles are listed publicly. Create an account when you want to
           apply or hire.
         </p>

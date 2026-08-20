@@ -31,22 +31,22 @@ export default function JobCard({
               {job.title}
             </h2>
 
-            <div className="mt-2 flex items-center gap-2 text-gray-600">
+            <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <Building2 size={16} />
               {job.company}
             </div>
 
-            <div className="mt-2 flex items-center gap-2 text-gray-600">
+            <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <MapPin size={16} />
               {job.location}
             </div>
 
-            <div className="mt-2 flex items-center gap-2 text-gray-600">
+            <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <BriefcaseBusiness size={16} />
               {job.employmentType.replace("_", " ")}
             </div>
 
-            <div className="mt-2 flex items-center gap-2 text-gray-600">
+            <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <PhilippinePeso size={16} />
               ₱{Number(job.salary).toLocaleString()}
             </div>

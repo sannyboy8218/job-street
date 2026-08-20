@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import Logo from "@/components/common/Logo";
+import ThemeToggle from "@/components/common/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 import { getUserDisplayName, getUserInitials } from "@/utils/user";
 
@@ -82,7 +83,7 @@ export default function Sidebar() {
     user?.role === ROLES.EMPLOYER ? employerLinks : jobSeekerLinks;
 
   return (
-    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r bg-white shadow-sm">
+    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="border-b p-6">
         <Logo />
       </div>
@@ -94,7 +95,7 @@ export default function Sidebar() {
           </div>
 
           <div>
-            <p className="font-semibold text-slate-800">{displayName}</p>
+            <p className="font-semibold text-slate-800 dark:text-slate-100">{displayName}</p>
             <p className="text-sm text-slate-500">{getRoleLabel(user?.role)}</p>
           </div>
         </div>
@@ -113,7 +114,7 @@ export default function Sidebar() {
                 `flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
                   isActive
                     ? "bg-blue-600 text-white shadow"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-slate-50"
                 }`
               }
             >
@@ -124,11 +125,12 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t p-5">
+      <div className="space-y-1 border-t border-slate-200 p-5 dark:border-slate-800">
+        <ThemeToggle showLabel />
         <button
           type="button"
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-600 transition hover:bg-red-50 hover:text-red-600"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-600 transition hover:bg-red-50 hover:text-red-600 dark:text-slate-300 dark:hover:bg-red-950/40"
         >
           <LogOut size={20} />
           Logout

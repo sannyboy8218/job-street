@@ -2,16 +2,19 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import AppTheme from "@/components/common/AppTheme";
 import "./index.css";
 import App from "./App.jsx";
-import { Toaster } from "sonner";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <App />
-        <Toaster richColors position="top-right" />
-      </BrowserRouter>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <App />
+          <AppTheme />
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   </StrictMode>
 );

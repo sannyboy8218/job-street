@@ -9,7 +9,7 @@ export default function JobsLayout() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
         Loading...
       </div>
     );

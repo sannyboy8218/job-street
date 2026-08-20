@@ -89,7 +89,7 @@ export default function BrowseJobsPage() {
 
       <form
         onSubmit={handleSearch}
-        className="grid gap-3 rounded-xl border bg-white p-4 md:grid-cols-[1fr_12rem_12rem_auto]"
+        className="grid gap-3 rounded-xl border bg-white p-4 md:grid-cols-[1fr_12rem_12rem_auto] dark:border-slate-700 dark:bg-slate-900"
       >
         <SearchBar value={search} onChange={setSearch} />
 
@@ -132,11 +132,11 @@ export default function BrowseJobsPage() {
           Loading jobs...
         </div>
       ) : error ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300">
           {error}
         </div>
       ) : jobs.length === 0 ? (
-        <div className="rounded-xl border bg-white p-8 text-center text-slate-500">
+        <div className="rounded-xl border bg-white p-8 text-center text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
           {hasFilters
             ? "No jobs match your search. Try different filters."
             : "No open jobs right now. Check back soon."}
