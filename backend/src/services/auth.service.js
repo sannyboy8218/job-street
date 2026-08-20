@@ -3,60 +3,45 @@ import userRepository from "../repositories/user.repository.js";
 import ConflictError from "../errors/ConflictError.js";
 import UnauthorizedError from "../errors/UnauthorizedError.js";
 import BadRequestError from "../errors/BadRequestError.js";
+import NotFoundError from "../errors/NotFoundError.js";
 import { generateAccessToken } from "../utils/jwt.js";
-
+import { serializeUser } from "../utils/serializeUser.js";
 
 const register = async (userData) => {
-  // Check if email already exists
   const existingUser = await userRepository.findByEmail(userData.email);
 
-if (existingUser) {
+  if (existingUser) {
     throw new ConflictError("Email already exists");
-}
+  }
 
-  // Hash the password
   const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-  // Create a new object with the hashed password
-  const userToCreate = {
+  const newUser = await userRepository.create({
     ...userData,
     password: hashedPassword,
-  };
+  });
 
-  // Save the user
-  const newUser = await userRepository.create(userToCreate);
-
-  // Remove password before returning the response
-  const { password, ...userWithoutPassword } = newUser.toObject();
-
-  return userWithoutPassword;
+  return serializeUser(newUser);
 };
-//end register
 
 const login = async ({ email, password }) => {
-  // Find user by email
   const user = await userRepository.findByEmail(email);
 
   if (!user) {
     throw new UnauthorizedError("Invalid email or password");
   }
 
-  // Compare password
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     throw new UnauthorizedError("Invalid email or password");
   }
 
-  // Generate JWT
   const token = generateAccessToken(user);
-
-  // Remove password before returning
-  const { password: _, ...userWithoutPassword } = user.toObject();
 
   return {
     token,
-    user: userWithoutPassword,
+    user: serializeUser(user),
   };
 };
 
@@ -67,7 +52,7 @@ const getCurrentUser = async (userId) => {
     throw new UnauthorizedError("User not found");
   }
 
-  return user;
+  return serializeUser(user);
 };
 
 const updateProfile = async (userId, profileData) => {
@@ -77,7 +62,7 @@ const updateProfile = async (userId, profileData) => {
     throw new UnauthorizedError("User not found");
   }
 
-  return user;
+  return serializeUser(user);
 };
 
 const changePassword = async (userId, { currentPassword, newPassword }) => {
@@ -108,10 +93,43 @@ const changePassword = async (userId, { currentPassword, newPassword }) => {
   await user.save();
 };
 
+const updateAvatar = async (userId, file) => {
+  if (!file) {
+    throw new BadRequestError("Please choose a photo to upload.");
+  }
+
+  const user = await userRepository.findByIdWithAvatar(userId);
+
+  if (!user) {
+    throw new UnauthorizedError("User not found");
+  }
+
+  user.avatarData = file.buffer;
+  user.avatarContentType = file.mimetype;
+  await user.save();
+
+  return serializeUser(user);
+};
+
+const getUserAvatar = async (userId) => {
+  const user = await userRepository.findByIdWithAvatar(userId);
+
+  if (!user || !user.avatarData || !user.avatarContentType) {
+    throw new NotFoundError("Profile photo not found.");
+  }
+
+  return {
+    data: user.avatarData,
+    contentType: user.avatarContentType,
+  };
+};
+
 export default {
   register,
   login,
   getCurrentUser,
   updateProfile,
   changePassword,
+  updateAvatar,
+  getUserAvatar,
 };

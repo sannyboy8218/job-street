@@ -15,6 +15,10 @@ const findByIdWithPassword = async (id) => {
   return await User.findById(id);
 };
 
+const findByIdWithAvatar = async (id) => {
+  return await User.findById(id).select("-password +avatarData");
+};
+
 const updateById = async (id, data) => {
   return await User.findByIdAndUpdate(id, data, {
     new: true,
@@ -27,5 +31,6 @@ export default {
   findByEmail,
   findById,
   findByIdWithPassword,
+  findByIdWithAvatar,
   updateById,
 };

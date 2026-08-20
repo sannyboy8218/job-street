@@ -9,9 +9,12 @@ import {
   getCurrentUser,
   updateProfile,
   changePassword,
+  updateAvatar,
+  getUserAvatar,
 } from "../controllers/auth.controller.js";
 import { updateProfileSchema } from "../validations/profile.validation.js";
 import { changePasswordSchema } from "../validations/password.validation.js";
+import { uploadAvatarFile } from "../middleware/uploadAvatar.js";
 
 const router = express.Router();
 
@@ -44,6 +47,18 @@ router.patch(
   authenticate,
   validate(changePasswordSchema),
   changePassword
+);
+
+router.post(
+  "/me/avatar",
+  authenticate,
+  uploadAvatarFile,
+  updateAvatar
+);
+
+router.get(
+  "/users/:id/avatar",
+  getUserAvatar
 );
 
 

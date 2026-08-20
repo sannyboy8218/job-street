@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "node --test src/utils/publicJobQuery.test.js src/utils/applicationReportQuery.test.js src/validations/application.validation.test.js src/validations/profile.validation.test.js src/validations/password.validation.test.js"
+    "test": "node --test src/utils/publicJobQuery.test.js src/utils/applicationReportQuery.test.js src/utils/notificationMessages.test.js src/utils/avatar.test.js src/validations/application.validation.test.js src/validations/profile.validation.test.js src/validations/password.validation.test.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.8.0",
     "morgan": "^1.11.0",
+    "multer": "^2.2.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
   },

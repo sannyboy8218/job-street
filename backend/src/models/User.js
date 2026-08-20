@@ -74,9 +74,37 @@ const userSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+
+    avatarData: {
+      type: Buffer,
+      select: false,
+    },
+
+    avatarContentType: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform(_doc, ret) {
+        delete ret.password;
+        delete ret.avatarData;
+        ret.hasAvatar = Boolean(ret.avatarContentType);
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform(_doc, ret) {
+        delete ret.password;
+        delete ret.avatarData;
+        ret.hasAvatar = Boolean(ret.avatarContentType);
+        return ret;
+      },
+    },
   }
 );
 

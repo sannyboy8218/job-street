@@ -52,3 +52,21 @@ export const changePassword = asyncHandler(async (req, res) => {
     message: "Password updated successfully",
   });
 });
+
+export const updateAvatar = asyncHandler(async (req, res) => {
+  const user = await authService.updateAvatar(req.user.id, req.file);
+
+  return res.status(200).json({
+    success: true,
+    message: "Profile photo updated.",
+    data: user,
+  });
+});
+
+export const getUserAvatar = asyncHandler(async (req, res) => {
+  const avatar = await authService.getUserAvatar(req.params.id);
+
+  res.set("Content-Type", avatar.contentType);
+  res.set("Cache-Control", "public, max-age=3600");
+  return res.status(200).send(avatar.data);
+});
