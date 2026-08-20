@@ -11,3 +11,21 @@ export const register = async (userData) => {
 
   return response.data.data;
 };
+
+export const getMe = async () => {
+  const response = await api.get("/auth/me");
+
+  return response.data.data;
+};
+
+export const updateProfile = async (profileData) => {
+  const response = await api.patch("/auth/me", profileData);
+
+  return response.data.data;
+};
+
+export const changePassword = async (payload) => {
+  const response = await api.patch("/auth/password", payload);
+
+  return response.data;
+};

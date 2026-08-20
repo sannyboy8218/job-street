@@ -1,257 +1,195 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { toast } from "sonner";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/common/LoadingButton";
+import LoginBrandPanel from "@/components/auth/LoginBrandPanel";
 
-import {
-  Mail,
-  Lock,
-  ArrowRight,
-  CheckCircle,
-} from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { getDashboardPath } from "@/constants/roles";
+import { loginSchema } from "@/validations/login.schema";
 
 import hirehubLogo from "@/assets/hirehub-icon.png";
-import { useAuth } from "@/context/AuthContext";
-import { ROLES } from "@/constants/roles";
-
-const loginSchema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string().min(1, "Password is required"),
-});
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, isAuthenticated, user, loading } = useAuth();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data) => {
-    try {
-      const user = await login(data);
+  useEffect(() => {
+    if (loading || !isAuthenticated || !user) {
+      return;
+    }
 
-      if (user.role === ROLES.EMPLOYER) {
-        navigate("/employer/dashboard");
-      } else {
-        navigate("/jobseeker/dashboard");
-      }
+    navigate(getDashboardPath(user.role), { replace: true });
+  }, [loading, isAuthenticated, user, navigate]);
+
+  const onSubmit = async (data) => {
+    setApiError("");
+
+    try {
+      const loggedInUser = await login(data);
+
+      toast.success("Signed in successfully");
+      navigate(getDashboardPath(loggedInUser.role), { replace: true });
     } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "Login failed."
-      );
+      const message =
+        error.response?.data?.message || "Invalid email or password";
+
+      setApiError(message);
     }
   };
 
+  if (loading || isAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-500">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen grid lg:grid-cols-2">
+    <div className="grid min-h-screen lg:grid-cols-2">
+      <LoginBrandPanel />
 
-      {/* LEFT PANEL */}
-
-      <div className="hidden lg:flex relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white">
-
-        <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-cyan-300/10 blur-3xl" />
-
-        <div className="relative z-10 flex flex-col justify-center px-20">
-
-          <img
-            src={hirehubLogo}
-            alt="HireHub"
-            className="w-28 mb-8 drop-shadow-lg"
-          />
-
-          <h1 className="text-6xl font-black tracking-tight">
-            HireHub
-          </h1>
-
-          <p className="mt-5 text-2xl text-blue-100">
-            Find Jobs.
-            <br />
-            Hire Talent.
-            <br />
-            Grow Careers.
-          </p>
-
-          <div className="mt-14 space-y-6">
-
-            <div className="flex items-center gap-4">
-              <CheckCircle size={26} />
-              <span className="text-lg">
-                Thousands of job opportunities
-              </span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <CheckCircle size={26} />
-              <span className="text-lg">
-                Verified employers
-              </span>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <CheckCircle size={26} />
-              <span className="text-lg">
-                Fast & secure applications
-              </span>
-            </div>
-
+      <div className="flex items-center justify-center bg-slate-50 px-4 py-10 sm:px-6">
+        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="mb-8 flex items-center gap-3 lg:hidden">
+            <img
+              src={hirehubLogo}
+              alt=""
+              className="h-10 w-10 object-contain"
+            />
+            <p className="text-xl font-bold tracking-tight text-slate-900">
+              HireHub
+            </p>
           </div>
 
-        </div>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Sign in
+          </h1>
 
-      </div>
+          <p className="mt-2 text-sm text-slate-500 sm:text-base">
+            Enter your email and password to access HireHub.
+          </p>
 
-      {/* RIGHT PANEL */}
+          {apiError ? (
+            <div
+              role="alert"
+              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
+              {apiError}
+            </div>
+          ) : null}
 
-      <div className="flex items-center justify-center bg-slate-50 px-6 py-10">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+            className="mt-8 space-y-5"
+          >
+            <div>
+              <Label htmlFor="email">Email address</Label>
 
-        <Card className="w-full max-w-md rounded-3xl border-0 shadow-2xl">
+              <div className="relative mt-2">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                  <Mail size={18} aria-hidden="true" />
+                </span>
 
-          <CardContent className="p-10">
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  className="h-11 rounded-xl pl-11"
+                  {...register("email")}
+                />
+              </div>
 
-            {/* Mobile Logo */}
-
-            <div className="lg:hidden text-center mb-10">
-
-              <img
-                src={hirehubLogo}
-                alt="HireHub"
-                className="mx-auto w-20"
-              />
-
-              <h1 className="mt-4 text-4xl font-black">
-                HireHub
-              </h1>
-
+              {errors.email ? (
+                <p id="email-error" className="mt-2 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              ) : null}
             </div>
 
-            <h2 className="text-4xl font-bold">
-              Welcome Back 👋
-            </h2>
+            <div>
+              <Label htmlFor="password">Password</Label>
 
-            <p className="mt-2 text-slate-500">
-              Sign in to continue your journey.
-            </p>
+              <div className="relative mt-2">
+                <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                  <Lock size={18} aria-hidden="true" />
+                </span>
 
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="mt-10 space-y-6"
-            >
-
-              <div>
-
-                <Label>Email Address</Label>
-
-                <div className="relative mt-2">
-
-                  <Mail
-                    size={18}
-                    className="absolute left-4 top-3.5 text-slate-400"
-                  />
-
-                  <Input
-                    className="pl-11 h-12 rounded-xl"
-                    placeholder="you@example.com"
-                    {...register("email")}
-                  />
-
-                </div>
-
-                {errors.email && (
-                  <p className="mt-2 text-sm text-red-500">
-                    {errors.email.message}
-                  </p>
-                )}
-
-              </div>
-
-              <div>
-
-                <Label>Password</Label>
-
-                <div className="relative mt-2">
-
-                  <Lock
-                    size={18}
-                    className="absolute left-4 top-3.5 text-slate-400"
-                  />
-
-                  <Input
-                    type="password"
-                    className="pl-11 h-12 rounded-xl"
-                    placeholder="••••••••"
-                    {...register("password")}
-                  />
-
-                </div>
-
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-500">
-                    {errors.password.message}
-                  </p>
-                )}
-
-              </div>
-
-              <div className="text-right">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  aria-invalid={!!errors.password}
+                  aria-describedby={
+                    errors.password ? "password-error" : undefined
+                  }
+                  className="h-11 rounded-xl pr-11 pl-11"
+                  {...register("password")}
+                />
 
                 <button
                   type="button"
-                  className="text-sm text-blue-600 hover:underline"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-400 hover:text-slate-700"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  Forgot Password?
+                  {showPassword ? (
+                    <EyeOff size={18} aria-hidden="true" />
+                  ) : (
+                    <Eye size={18} aria-hidden="true" />
+                  )}
                 </button>
-
               </div>
 
-              <Button
-                type="submit"
-                className="w-full h-12 rounded-xl text-base"
-              >
-                Sign In
-
-                <ArrowRight
-                  className="ml-2"
-                  size={18}
-                />
-              </Button>
-
-            </form>
-
-            <div className="mt-8 text-center text-sm text-slate-500">
-
-              Don't have an account?{" "}
-
-              <Link
-                to="/register"
-                className="font-semibold text-blue-600 hover:underline"
-              >
-                Create one
-              </Link>
-
+              {errors.password ? (
+                <p id="password-error" className="mt-2 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              ) : null}
             </div>
 
-          </CardContent>
+            <LoadingButton
+              type="submit"
+              loading={isSubmitting}
+              className="h-11 w-full rounded-xl bg-blue-600 text-base text-white hover:bg-blue-700"
+            >
+              {isSubmitting ? "Signing in..." : "Sign in"}
+            </LoadingButton>
+          </form>
 
-        </Card>
-
+          <p className="mt-6 text-center text-sm text-slate-500">
+            Don&apos;t have an account?{" "}
+            <Link
+              to="/register"
+              className="font-semibold text-blue-600 hover:underline"
+            >
+              Create an account
+            </Link>
+          </p>
+        </div>
       </div>
-
     </div>
   );
 }

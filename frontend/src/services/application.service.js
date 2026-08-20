@@ -16,3 +16,12 @@ export const getApplicantsByJob = async (jobId) => {
 
   return response.data.data;
 };
+
+export const updateApplicationStatus = async (applicationId, status) => {
+  const response = await api.patch(
+    `/applications/${applicationId}/status`,
+    { status }
+  );
+
+  return response.data.data;
+};

@@ -18,6 +18,7 @@ export default function JobCard({
   onEdit,
   onDelete,
   onApplicants,
+  onToggleStatus,
 }) {
   return (
     <Card className="transition hover:shadow-lg">
@@ -65,6 +66,13 @@ export default function JobCard({
           >
             <Users className="mr-2 h-4 w-4" />
             View Applicants
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => onToggleStatus(job)}
+          >
+            {job.status === "OPEN" ? "Close job" : "Reopen job"}
           </Button>
 
           <Button

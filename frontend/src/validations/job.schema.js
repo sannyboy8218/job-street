@@ -14,4 +14,6 @@ export const jobSchema = z.object({
   description: z.string().min(20, "Description is too short"),
 
   requirements: z.string().min(20, "Requirements are too short"),
+
+  status: z.enum(["OPEN", "CLOSED"]).optional(),
 });

@@ -1,18 +1,19 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { ROLES } from "@/constants/roles";
+import { ROLES, getRoleLabel, getProfilePath } from "@/constants/roles";
 
 import {
   LayoutDashboard,
   BriefcaseBusiness,
   PlusCircle,
-  Users,
   FileText,
-  Settings,
+  UserRound,
+  FileSpreadsheet,
   LogOut,
 } from "lucide-react";
 
 import Logo from "@/components/common/Logo";
 import { useAuth } from "@/context/AuthContext";
+import { getUserDisplayName, getUserInitials } from "@/utils/user";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -23,17 +24,8 @@ export default function Sidebar() {
     navigate("/login");
   };
 
-  const initials =
-    user?.name
-      ?.split(" ")
-      .map((word) => word[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase() || "?";
-
-  // ==========================
-  // Employer Navigation
-  // ==========================
+  const initials = getUserInitials(user);
+  const displayName = getUserDisplayName(user);
 
   const employerLinks = [
     {
@@ -52,15 +44,16 @@ export default function Sidebar() {
       icon: PlusCircle,
     },
     {
-      name: "Applicants",
-      path: "/employer/applicants",
-      icon: Users,
+      name: "Reports",
+      path: "/employer/reports",
+      icon: FileSpreadsheet,
+    },
+    {
+      name: "Profile",
+      path: getProfilePath(ROLES.EMPLOYER),
+      icon: UserRound,
     },
   ];
-
-  // ==========================
-  // Job Seeker Navigation
-  // ==========================
 
   const jobSeekerLinks = [
     {
@@ -78,21 +71,22 @@ export default function Sidebar() {
       path: "/jobseeker/applications",
       icon: FileText,
     },
+    {
+      name: "Profile",
+      path: getProfilePath(ROLES.JOB_SEEKER),
+      icon: UserRound,
+    },
   ];
 
   const links =
-    user?.role === ROLES.EMPLOYER
-      ? employerLinks
-      : jobSeekerLinks;
+    user?.role === ROLES.EMPLOYER ? employerLinks : jobSeekerLinks;
 
   return (
     <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r bg-white shadow-sm">
-      {/* Logo */}
       <div className="border-b p-6">
         <Logo />
       </div>
 
-      {/* Logged In User */}
       <div className="border-b px-6 py-5">
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
@@ -100,18 +94,12 @@ export default function Sidebar() {
           </div>
 
           <div>
-            <p className="font-semibold text-slate-800">
-              {user?.name || "User"}
-            </p>
-
-            <p className="text-sm text-slate-500">
-              {user?.role || "USER"}
-            </p>
+            <p className="font-semibold text-slate-800">{displayName}</p>
+            <p className="text-sm text-slate-500">{getRoleLabel(user?.role)}</p>
           </div>
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-2 p-5">
         {links.map((link) => {
           const Icon = link.icon;
@@ -136,14 +124,9 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom Actions */}
       <div className="border-t p-5">
-        <button className="mb-2 flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-600 transition hover:bg-slate-100">
-          <Settings size={20} />
-          Settings
-        </button>
-
         <button
+          type="button"
           onClick={handleLogout}
           className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-600 transition hover:bg-red-50 hover:text-red-600"
         >

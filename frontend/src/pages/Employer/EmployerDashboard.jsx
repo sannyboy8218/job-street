@@ -53,6 +53,14 @@ export default function EmployerDashboard() {
     );
   }
 
+  if (!dashboard) {
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700">
+        Could not load dashboard.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
 
@@ -118,7 +126,7 @@ export default function EmployerDashboard() {
             <div>
               <p className="text-sm text-slate-500">Applicants</p>
               <h2 className="mt-2 text-3xl font-bold">
-                0
+                {dashboard.totalApplicants}
               </h2>
             </div>
 
@@ -243,7 +251,7 @@ export default function EmployerDashboard() {
             <Button
               variant="outline"
               onClick={() =>
-                navigate("/employer/applicants")
+                navigate("/employer/jobs")
               }
             >
               Applicants

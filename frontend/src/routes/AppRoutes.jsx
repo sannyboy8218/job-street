@@ -16,9 +16,14 @@ import EmployerJobsPage from "@/pages/Employer/EmployerJobsPage";
 import CreateJobPage from "@/pages/Employer/CreateJobPage";
 import EditJobPage from "@/pages/Employer/EditJobPage";
 import ApplicantsPage from "@/pages/Employer/ApplicantsPage";
+import EmployerReportsPage from "@/pages/Employer/EmployerReportsPage";
 
 import BrowseJobsPage from "@/pages/JobSeeker/BrowseJobsPage";
 import JobDetailsPage from "@/pages/JobSeeker/JobDetailsPage";
+import MyApplicationsPage from "@/pages/JobSeeker/MyApplicationsPage";
+import JobsLayout from "@/layouts/JobsLayout";
+import NotFoundPage from "@/pages/NotFound/NotFoundPage";
+import ProfilePage from "@/pages/Profile/ProfilePage";
 
 export default function AppRoutes() {
   return (
@@ -66,6 +71,16 @@ export default function AppRoutes() {
       path="/employer/jobs/:jobId/applicants"
       element={<ApplicantsPage />}
     />
+
+    <Route
+      path="/employer/reports"
+      element={<EmployerReportsPage />}
+    />
+
+    <Route
+      path="/employer/profile"
+      element={<ProfilePage />}
+    />
   </Route>
 
   {/* Job Seeker Routes */}
@@ -80,17 +95,24 @@ export default function AppRoutes() {
       path="/jobseeker/dashboard"
       element={<JobSeekerDashboard />}
     />
+    <Route
+      path="/jobseeker/applications"
+      element={<MyApplicationsPage />}
+    />
+    <Route
+      path="/jobseeker/profile"
+      element={<ProfilePage />}
+    />
   </Route>
 
-    <Route
-    path="/jobs"
-    element={<BrowseJobsPage />}
-  />
+  <Route element={<JobsLayout />}>
+    <Route path="/jobs" element={<BrowseJobsPage />} />
+    <Route path="/jobs/:id" element={<JobDetailsPage />} />
+  </Route>
 
-  <Route
-    path="/jobs/:id"
-    element={<JobDetailsPage />}
-  />
+  <Route element={<MainLayout />}>
+    <Route path="*" element={<NotFoundPage />} />
+  </Route>
 
 </Routes>
   );

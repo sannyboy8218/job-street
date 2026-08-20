@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import * as authService from "@/services/auth.service";
 
 const AuthContext = createContext();
@@ -9,59 +8,99 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
-useEffect(() => {
-  if (token) {
-    try {
-      const decoded = jwtDecode(token);
-
-      const storedUser = localStorage.getItem("user");
-
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      } else {
-        setUser({
-          id: decoded.id,
-          email: decoded.email,
-          role: decoded.role,
-        });
-      }
-    } catch (error) {
-      console.error("Invalid token:", error);
-
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-
-      setToken(null);
-      setUser(null);
-    }
-  }
-
-  setLoading(false);
-}, [token]);
-
-const login = async (credentials) => {
-  const response = await authService.login(credentials);
-
-  localStorage.setItem("token", response.token);
-
-  // Save the whole user object
-  localStorage.setItem(
-    "user",
-    JSON.stringify(response.user)
-  );
-
-  setToken(response.token);
-  setUser(response.user);
-
-  return response.user;
-};
-
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 
     setToken(null);
     setUser(null);
+  };
+
+  const updateUser = (nextUser) => {
+    localStorage.setItem("user", JSON.stringify(nextUser));
+    setUser(nextUser);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const bootstrap = async () => {
+      const storedToken = localStorage.getItem("token");
+
+      if (!storedToken) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const me = await authService.getMe();
+
+        if (cancelled) {
+          return;
+        }
+
+        setToken(storedToken);
+        setUser(me);
+        localStorage.setItem("user", JSON.stringify(me));
+      } catch (error) {
+        if (cancelled) {
+          return;
+        }
+
+        if (error.response?.status === 401) {
+          logout();
+          return;
+        }
+
+        const storedUser = localStorage.getItem("user");
+
+        if (storedUser) {
+          try {
+            setUser(JSON.parse(storedUser));
+            setToken(storedToken);
+          } catch {
+            logout();
+          }
+        } else {
+          logout();
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    bootstrap();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const onUnauthorized = () => {
+      setToken(null);
+      setUser(null);
+    };
+
+    window.addEventListener("auth:unauthorized", onUnauthorized);
+
+    return () => {
+      window.removeEventListener("auth:unauthorized", onUnauthorized);
+    };
+  }, []);
+
+  const login = async (credentials) => {
+    const response = await authService.login(credentials);
+
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("user", JSON.stringify(response.user));
+
+    setToken(response.token);
+    setUser(response.user);
+
+    return response.user;
   };
 
   return (
@@ -73,6 +112,7 @@ const login = async (credentials) => {
         isAuthenticated: !!user,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}
