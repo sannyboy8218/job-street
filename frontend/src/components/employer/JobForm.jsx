@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { BriefcaseBusiness } from "lucide-react";
 
 import { jobSchema } from "@/validations/job.schema";
+import { getEmploymentTypeLabel } from "@/utils/job";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -23,6 +24,7 @@ const defaultFormValues = {
   location: "",
   employmentType: "",
   salary: "",
+  positionsNeeded: 1,
   description: "",
   requirements: "",
   status: "OPEN",
@@ -123,11 +125,14 @@ export default function JobForm({
                 }
               >
                 <SelectTrigger className="mt-2 w-full">
-                  <SelectValue placeholder="Select Employment Type" />
+                  <SelectValue placeholder="Select employment type">
+                    {getEmploymentTypeLabel(employmentType) ||
+                      "Select employment type"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FULL_TIME">Full Time</SelectItem>
-                  <SelectItem value="PART_TIME">Part Time</SelectItem>
+                  <SelectItem value="FULL_TIME">Full time</SelectItem>
+                  <SelectItem value="PART_TIME">Part time</SelectItem>
                   <SelectItem value="CONTRACT">Contract</SelectItem>
                   <SelectItem value="INTERNSHIP">Internship</SelectItem>
                 </SelectContent>
@@ -156,6 +161,26 @@ export default function JobForm({
               {errors.salary ? (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.salary.message}
+                </p>
+              ) : null}
+            </div>
+
+            <div>
+              <Label htmlFor="positionsNeeded">People needed</Label>
+              <Input
+                id="positionsNeeded"
+                type="number"
+                min="1"
+                className="mt-2"
+                placeholder="1"
+                {...register("positionsNeeded")}
+              />
+              <p className="mt-1 text-sm text-muted-foreground">
+                How many people do you need for this role?
+              </p>
+              {errors.positionsNeeded ? (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.positionsNeeded.message}
                 </p>
               ) : null}
             </div>

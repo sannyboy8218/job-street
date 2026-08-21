@@ -15,5 +15,12 @@ export const jobSchema = z.object({
 
   requirements: z.string().min(20, "Requirements are too short"),
 
+  positionsNeeded: z.coerce
+    .number()
+    .int("Openings must be a whole number.")
+    .min(1, "You need at least 1 opening.")
+    .max(99, "Openings must be 99 or fewer.")
+    .default(1),
+
   status: z.enum(["OPEN", "CLOSED"]).optional(),
 });

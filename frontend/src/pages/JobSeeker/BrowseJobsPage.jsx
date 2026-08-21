@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getEmploymentTypeLabel } from "@/utils/job";
 
 const EMPTY_FILTERS = {
   search: "",
@@ -101,12 +102,16 @@ export default function BrowseJobsPage() {
 
         <Select value={employmentType} onValueChange={setEmploymentType}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Job type" />
+            <SelectValue placeholder="Job type">
+              {employmentType === "ALL"
+                ? "All types"
+                : getEmploymentTypeLabel(employmentType)}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="ALL">All types</SelectItem>
-            <SelectItem value="FULL_TIME">Full Time</SelectItem>
-            <SelectItem value="PART_TIME">Part Time</SelectItem>
+            <SelectItem value="FULL_TIME">Full time</SelectItem>
+            <SelectItem value="PART_TIME">Part time</SelectItem>
             <SelectItem value="CONTRACT">Contract</SelectItem>
             <SelectItem value="INTERNSHIP">Internship</SelectItem>
           </SelectContent>

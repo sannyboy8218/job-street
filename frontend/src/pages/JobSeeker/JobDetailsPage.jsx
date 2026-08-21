@@ -12,6 +12,7 @@ import { getJob } from "@/services/publicJob.service";
 import {
   applyToJob,
   getMyApplications,
+  markJobViewed,
 } from "@/services/application.service";
 import { useAuth } from "@/context/AuthContext";
 import { ROLES } from "@/constants/roles";
@@ -19,8 +20,11 @@ import { ROLES } from "@/constants/roles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import JobClosedNotice from "@/components/jobs/JobClosedNotice";
 import ApplicationStatusBadge from "@/components/jobs/ApplicationStatusBadge";
 import { applySchema } from "@/validations/apply.schema";
+import { getEmploymentTypeLabel } from "@/utils/job";
+import { formatDateTime } from "@/utils/date";
 
 export default function JobDetailsPage() {
   const { id } = useParams();
@@ -74,6 +78,22 @@ export default function JobDetailsPage() {
 
     loadExistingApplication();
   }, [id, isJobSeeker]);
+
+  useEffect(() => {
+    if (!isJobSeeker || !existingApplication?._id) {
+      return;
+    }
+
+    markJobViewed(id)
+      .then(() => {
+        setExistingApplication((current) =>
+          current
+            ? { ...current, lastViewedAt: new Date().toISOString() }
+            : current
+        );
+      })
+      .catch(() => {});
+  }, [id, isJobSeeker, existingApplication?._id]);
 
   const handleApply = async (event) => {
     event.preventDefault();
@@ -148,8 +168,20 @@ export default function JobDetailsPage() {
               {job.company}
             </p>
           </div>
-          <Badge>{job.employmentType}</Badge>
+          <Badge>{getEmploymentTypeLabel(job.employmentType)}</Badge>
         </div>
+
+        {job.status === "CLOSED" ? (
+          <div className="mt-6">
+            <JobClosedNotice />
+          </div>
+        ) : null}
+
+        {existingApplication?.lastViewedAt ? (
+          <p className="mt-4 text-sm text-slate-500">
+            Last viewed {formatDateTime(existingApplication.lastViewedAt)}
+          </p>
+        ) : null}
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div className="flex items-center gap-2">
@@ -207,16 +239,21 @@ export default function JobDetailsPage() {
             instead.
           </p>
         ) : existingApplication ? (
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-slate-600">You have already applied.</p>
-            <ApplicationStatusBadge status={existingApplication.status} />
-            <Link
-              to="/jobseeker/applications"
-              className="text-sm font-semibold text-blue-600 hover:underline"
-            >
-              View my applications
-            </Link>
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-slate-600">You have already applied.</p>
+              <ApplicationStatusBadge status={existingApplication.status} />
+              <Link
+                to="/jobseeker/applications"
+                className="text-sm font-semibold text-blue-600 hover:underline"
+              >
+                View my applications
+              </Link>
+            </div>
+            {job.status === "CLOSED" ? <JobClosedNotice /> : null}
           </div>
+        ) : job.status === "CLOSED" ? (
+          <JobClosedNotice />
         ) : (
           <form onSubmit={handleApply} className="space-y-4">
             <div>

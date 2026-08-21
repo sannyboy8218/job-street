@@ -21,6 +21,7 @@ function toUpdatePayload(job, status) {
     location: job.location,
     employmentType: job.employmentType,
     salary: Number(job.salary),
+    positionsNeeded: Number(job.positionsNeeded || 1),
     description: job.description,
     requirements: job.requirements,
     status,

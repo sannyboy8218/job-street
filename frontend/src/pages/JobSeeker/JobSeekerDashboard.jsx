@@ -5,6 +5,7 @@ import { FileText, CircleCheck, Clock } from "lucide-react";
 import { getMyApplications } from "@/services/application.service";
 import PageHeader from "@/components/common/PageHeader";
 import ApplicationStatusBadge from "@/components/jobs/ApplicationStatusBadge";
+import { formatDateTime } from "@/utils/date";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -126,6 +127,16 @@ export default function JobSeekerDashboard() {
                     <p className="text-sm text-slate-500">
                       {application.job?.company}
                     </p>
+                    {application.job?.status === "CLOSED" ? (
+                      <p className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+                        This position is no longer accepting applications.
+                      </p>
+                    ) : null}
+                    {application.lastViewedAt ? (
+                      <p className="mt-1 text-xs text-slate-400">
+                        Last viewed {formatDateTime(application.lastViewedAt)}
+                      </p>
+                    ) : null}
                   </div>
                   <ApplicationStatusBadge status={application.status} />
                 </div>

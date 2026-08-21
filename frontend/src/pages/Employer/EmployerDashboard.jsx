@@ -185,6 +185,9 @@ export default function EmployerDashboard() {
                     <p className="text-sm text-slate-500 dark:text-slate-400">
                       {job.company}
                     </p>
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                      Need {job.positionsNeeded || 1} · {job.applicantCount || 0} applying
+                    </p>
                   </div>
 
                   <div className="flex items-center gap-4">

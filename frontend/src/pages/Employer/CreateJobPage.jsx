@@ -19,6 +19,7 @@ export default function CreateJobPage() {
         location: data.location,
         employmentType: data.employmentType,
         salary: data.salary,
+        positionsNeeded: Number(data.positionsNeeded),
         description: data.description,
         requirements: data.requirements,
       });

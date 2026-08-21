@@ -25,3 +25,7 @@ export const updateApplicationStatus = async (applicationId, status) => {
 
   return response.data.data;
 };
+
+export const markJobViewed = async (jobId) => {
+  await api.post(`/applications/viewed/${jobId}`);
+};

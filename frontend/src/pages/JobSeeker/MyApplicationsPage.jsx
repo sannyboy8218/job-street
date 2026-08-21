@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import { getMyApplications } from "@/services/application.service";
 import ApplicationStatusBadge from "@/components/jobs/ApplicationStatusBadge";
+import JobClosedNotice from "@/components/jobs/JobClosedNotice";
+import { formatDate, formatDateTime } from "@/utils/date";
 
 export default function MyApplicationsPage() {
   const [applications, setApplications] = useState([]);
@@ -66,34 +68,47 @@ export default function MyApplicationsPage() {
         <div className="space-y-4">
           {applications.map((application) => {
             const job = application.job;
+            const isClosed = job?.status === "CLOSED";
 
             return (
               <div
                 key={application._id}
-                className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm sm:flex-row sm:items-center sm:justify-between dark:border-slate-700 dark:bg-slate-900"
+                className="flex flex-col gap-4 rounded-xl border bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
               >
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    {job?.title || "Job no longer available"}
-                  </h2>
-                  <p className="mt-1 text-slate-500">{job?.company}</p>
-                  <p className="mt-2 text-sm text-slate-400">
-                    Applied on{" "}
-                    {new Date(application.createdAt).toLocaleDateString()}
-                  </p>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <h2 className="text-xl font-semibold">
+                      {job?.title || "Job no longer available"}
+                    </h2>
+                    <p className="mt-1 text-slate-500">{job?.company}</p>
+                    <p className="mt-2 text-sm text-slate-400">
+                      Applied on {formatDate(application.createdAt)}
+                    </p>
+                    {application.lastViewedAt ? (
+                      <p className="mt-1 text-sm text-slate-400">
+                        Last viewed {formatDateTime(application.lastViewedAt)}
+                      </p>
+                    ) : (
+                      <p className="mt-1 text-sm text-slate-400">
+                        You have not opened this posting since you applied.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <ApplicationStatusBadge status={application.status} />
+                    {job?._id ? (
+                      <Link
+                        to={`/jobs/${job._id}`}
+                        className="text-sm font-semibold text-blue-600 hover:underline"
+                      >
+                        View job
+                      </Link>
+                    ) : null}
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <ApplicationStatusBadge status={application.status} />
-                  {job?._id ? (
-                    <Link
-                      to={`/jobs/${job._id}`}
-                      className="text-sm font-semibold text-blue-600 hover:underline"
-                    >
-                      View job
-                    </Link>
-                  ) : null}
-                </div>
+                {isClosed ? <JobClosedNotice /> : null}
               </div>
             );
           })}

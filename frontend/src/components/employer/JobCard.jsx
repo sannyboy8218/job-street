@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import JobStatusBadge from "./JobStatusBadge";
+import { getEmploymentTypeLabel } from "@/utils/job";
 
 export default function JobCard({
   job,
@@ -43,12 +44,17 @@ export default function JobCard({
 
             <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <BriefcaseBusiness size={16} />
-              {job.employmentType.replace("_", " ")}
+              {getEmploymentTypeLabel(job.employmentType)}
             </div>
 
             <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
               <PhilippinePeso size={16} />
               ₱{Number(job.salary).toLocaleString()}
+            </div>
+
+            <div className="mt-2 flex items-center gap-2 text-gray-600 dark:text-slate-400">
+              <Users size={16} />
+              Need {job.positionsNeeded || 1} · {job.applicantCount || 0} applying
             </div>
           </div>
 

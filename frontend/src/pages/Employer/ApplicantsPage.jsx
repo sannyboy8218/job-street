@@ -10,8 +10,9 @@ import { getJob, updateJob } from "@/services/job.service";
 import { getUserDisplayName } from "@/utils/user";
 import UserAvatar from "@/components/common/UserAvatar";
 import {
-  APPLICATION_STATUSES,
+  getAllowedApplicationStatuses,
   getApplicationStatusLabel,
+  isApplicationStatusFinal,
 } from "@/utils/application";
 import ApplicationStatusBadge from "@/components/jobs/ApplicationStatusBadge";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
@@ -24,6 +25,7 @@ function toJobUpdatePayload(job, status) {
     location: job.location,
     employmentType: job.employmentType,
     salary: Number(job.salary),
+    positionsNeeded: Number(job.positionsNeeded || 1),
     description: job.description,
     requirements: job.requirements,
     status,
@@ -188,9 +190,12 @@ export default function ApplicantsPage() {
                       </Label>
                       <select
                         id={`status-${application._id}`}
-                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                        className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 disabled:opacity-60"
                         value={application.status}
-                        disabled={updatingId === application._id}
+                        disabled={
+                          updatingId === application._id ||
+                          isApplicationStatusFinal(application.status)
+                        }
                         onChange={(event) =>
                           handleStatusChange(
                             application._id,
@@ -198,12 +203,19 @@ export default function ApplicantsPage() {
                           )
                         }
                       >
-                        {APPLICATION_STATUSES.map((status) => (
-                          <option key={status} value={status}>
-                            {getApplicationStatusLabel(status)}
-                          </option>
-                        ))}
+                        {getAllowedApplicationStatuses(application.status).map(
+                          (status) => (
+                            <option key={status} value={status}>
+                              {getApplicationStatusLabel(status)}
+                            </option>
+                          )
+                        )}
                       </select>
+                      {isApplicationStatusFinal(application.status) ? (
+                        <p className="mt-1 text-xs text-slate-500">
+                          This decision is final.
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                 </div>

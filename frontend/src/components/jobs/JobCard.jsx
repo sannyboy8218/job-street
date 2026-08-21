@@ -8,6 +8,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { getEmploymentTypeLabel } from "@/utils/job";
 
 export default function JobCard({ job }) {
   return (
@@ -24,7 +25,7 @@ export default function JobCard({ job }) {
           </p>
         </div>
 
-        <Badge>{job.employmentType}</Badge>
+        <Badge>{getEmploymentTypeLabel(job.employmentType)}</Badge>
       </div>
 
       <div className="mt-5 space-y-2 text-sm text-slate-600">
