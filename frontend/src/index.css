@@ -132,3 +132,73 @@
     color-scheme: dark;
     }
 }
+
+@keyframes hirehub-orb-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(1.5rem, 1.25rem) scale(1.08);
+  }
+}
+
+@keyframes hirehub-orb-drift-alt {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-1.25rem, -1rem) scale(1.05);
+  }
+}
+
+@keyframes hirehub-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.75rem);
+  }
+}
+
+.hirehub-orb-a {
+  animation: hirehub-orb-drift 18s ease-in-out infinite;
+}
+
+.hirehub-orb-b {
+  animation: hirehub-orb-drift-alt 22s ease-in-out infinite;
+}
+
+.hirehub-float-mark {
+  animation: hirehub-float 8s ease-in-out infinite;
+}
+
+.hirehub-float-mark-slow {
+  animation: hirehub-float 11s ease-in-out infinite 1.6s;
+}
+
+@keyframes hirehub-character-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.5rem);
+  }
+}
+
+.hirehub-character-bob {
+  animation: hirehub-character-bob 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hirehub-orb-a,
+  .hirehub-orb-b,
+  .hirehub-float-mark,
+  .hirehub-float-mark-slow,
+  .hirehub-character-bob {
+    animation: none;
+  }
+}

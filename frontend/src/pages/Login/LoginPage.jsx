@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import LoadingButton from "@/components/common/LoadingButton";
 import LoginBrandPanel from "@/components/auth/LoginBrandPanel";
+import AuthFormCard from "@/components/auth/AuthFormCard";
+import AuthErrorAlert from "@/components/auth/AuthErrorAlert";
 
 import { useAuth } from "@/context/AuthContext";
 import { getDashboardPath } from "@/constants/roles";
@@ -71,7 +73,7 @@ export default function LoginPage() {
         <div className="absolute top-4 right-4">
           <ThemeToggle />
         </div>
-        <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 dark:border-slate-700 dark:bg-slate-900">
+        <AuthFormCard className="max-w-md">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
             <img
               src={hirehubLogo}
@@ -91,14 +93,7 @@ export default function LoginPage() {
             Enter your email and password to access HireHub.
           </p>
 
-          {apiError ? (
-            <div
-              role="alert"
-              className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/50 dark:text-red-300"
-            >
-              {apiError}
-            </div>
-          ) : null}
+          {apiError ? <AuthErrorAlert>{apiError}</AuthErrorAlert> : null}
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -192,7 +187,7 @@ export default function LoginPage() {
               Create an account
             </Link>
           </p>
-        </div>
+        </AuthFormCard>
       </div>
     </div>
   );
