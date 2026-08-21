@@ -55,6 +55,12 @@ const jobSchema = new mongoose.Schema(
       default: "OPEN",
     },
 
+    positionsNeeded: {
+      type: Number,
+      min: 1,
+      default: 1,
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

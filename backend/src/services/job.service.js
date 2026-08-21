@@ -13,6 +13,40 @@ const assertJobOwner = (job, employerId) => {
   }
 };
 
+export async function attachApplicantCounts(jobs) {
+  const list = jobs.map((job) =>
+    job.toObject ? job.toObject() : { ...job }
+  );
+
+  if (list.length === 0) {
+    return list;
+  }
+
+  const counts = await Application.aggregate([
+    {
+      $match: {
+        job: { $in: list.map((job) => job._id) },
+      },
+    },
+    {
+      $group: {
+        _id: "$job",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const countByJob = Object.fromEntries(
+    counts.map((row) => [String(row._id), row.count])
+  );
+
+  return list.map((job) => ({
+    ...job,
+    positionsNeeded: job.positionsNeeded || 1,
+    applicantCount: countByJob[String(job._id)] || 0,
+  }));
+}
+
 export const createJob = async (jobData) => {
   const job = await Job.create(jobData);
 
@@ -20,11 +54,13 @@ export const createJob = async (jobData) => {
 };
 
 export const getJobsByEmployer = async (employerId) => {
-  return await Job.find({
+  const jobs = await Job.find({
     createdBy: employerId,
   }).sort({
     createdAt: -1,
   });
+
+  return attachApplicantCounts(jobs);
 };
 
 export const getJobById = async (jobId, employerId) => {
@@ -63,10 +99,7 @@ export const getPublicJobs = async (filters = {}) => {
 };
 
 export const getPublicJob = async (jobId) => {
-  return await Job.findOne({
-    _id: jobId,
-    status: "OPEN",
-  });
+  return await Job.findById(jobId);
 };
 
 export const deleteJob = async (jobId, employerId) => {

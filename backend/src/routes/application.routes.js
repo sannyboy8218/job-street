@@ -31,6 +31,13 @@ router.get(
   applicationController.getMyApplications
 );
 
+router.post(
+  "/viewed/:jobId",
+  authenticate,
+  authorize("JOB_SEEKER"),
+  applicationController.markApplicationViewed
+);
+
 router.patch(
   "/:id/status",
   authenticate,

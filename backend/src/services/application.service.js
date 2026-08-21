@@ -10,6 +10,7 @@ import {
   buildStatusUpdatedMessage,
   getApplicantDisplayName,
 } from "../utils/notificationMessages.js";
+import { canChangeApplicationStatus } from "../utils/applicationStatus.js";
 
 export const applyToJob = async (
   applicantId,
@@ -123,6 +124,12 @@ export const updateApplicationStatus = async (
   const applicantId = application.applicant;
   const statusChanged = application.status !== status;
 
+  if (statusChanged && !canChangeApplicationStatus(application.status, status)) {
+    throw new BadRequestError(
+      "This application status cannot be changed backward or after a final decision."
+    );
+  }
+
   application.status = status;
   await application.save();
 
@@ -139,6 +146,22 @@ export const updateApplicationStatus = async (
       application: application._id,
     });
   }
+
+  return application;
+};
+
+export const markApplicationViewed = async (applicantId, jobId) => {
+  const application = await Application.findOne({
+    applicant: applicantId,
+    job: jobId,
+  });
+
+  if (!application) {
+    return null;
+  }
+
+  application.lastViewedAt = new Date();
+  await application.save();
 
   return application;
 };

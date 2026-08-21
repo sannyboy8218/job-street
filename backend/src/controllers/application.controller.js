@@ -53,3 +53,12 @@ export const updateApplicationStatus = asyncHandler(async (req, res) => {
     data: application,
   });
 });
+
+export const markApplicationViewed = asyncHandler(async (req, res) => {
+  await applicationService.markApplicationViewed(
+    req.user.id,
+    req.params.jobId
+  );
+
+  res.status(204).send();
+});

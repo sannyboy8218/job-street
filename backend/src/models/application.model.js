@@ -36,6 +36,11 @@ const applicationSchema = new mongoose.Schema(
       ],
       default: "PENDING",
     },
+
+    lastViewedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
