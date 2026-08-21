@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { ROLES, getRoleLabel, getProfilePath } from "@/constants/roles";
+import { ROLES, getProfilePath } from "@/constants/roles";
 
 import {
   LayoutDashboard,
@@ -12,10 +12,7 @@ import {
 } from "lucide-react";
 
 import Logo from "@/components/common/Logo";
-import ThemeToggle from "@/components/common/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
-import { getUserDisplayName } from "@/utils/user";
-import UserAvatar from "@/components/common/UserAvatar";
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -25,8 +22,6 @@ export default function Sidebar() {
     logout();
     navigate("/login");
   };
-
-  const displayName = getUserDisplayName(user);
 
   const employerLinks = [
     {
@@ -83,20 +78,9 @@ export default function Sidebar() {
     user?.role === ROLES.EMPLOYER ? employerLinks : jobSeekerLinks;
 
   return (
-    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <div className="border-b p-6">
-        <Logo />
-      </div>
-
-      <div className="border-b px-6 py-5">
-        <div className="flex items-center gap-3">
-          <UserAvatar user={user} size="md" />
-
-          <div>
-            <p className="font-semibold text-slate-800 dark:text-slate-100">{displayName}</p>
-            <p className="text-sm text-slate-500">{getRoleLabel(user?.role)}</p>
-          </div>
-        </div>
+    <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex h-20 items-center border-b border-slate-200 px-6 dark:border-slate-800">
+        <Logo compact />
       </div>
 
       <nav className="flex-1 space-y-2 p-5">
@@ -123,8 +107,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="space-y-1 border-t border-slate-200 p-5 dark:border-slate-800">
-        <ThemeToggle showLabel />
+      <div className="border-t border-slate-200 p-5 dark:border-slate-800">
         <button
           type="button"
           onClick={handleLogout}

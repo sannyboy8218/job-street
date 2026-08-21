@@ -2,7 +2,7 @@ import hirehubIcon from "@/assets/hirehub-icon.png";
 import { useAuth } from "@/context/AuthContext";
 import { ROLES } from "@/constants/roles";
 
-export default function Logo() {
+export default function Logo({ compact = false }) {
   const { user } = useAuth();
 
   const portal =
@@ -11,17 +11,25 @@ export default function Logo() {
       : "Job Seeker Portal";
 
   return (
-    <div className="flex items-center gap-4">
-      {/* Icon */}
+    <div className="flex items-center gap-3">
       <img
         src={hirehubIcon}
         alt="HireHub"
-        className="h-20 w-20 object-contain"
+        className={
+          compact
+            ? "h-10 w-10 object-contain"
+            : "h-20 w-20 object-contain"
+        }
       />
 
-      {/* Text */}
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50">
+        <h1
+          className={
+            compact
+              ? "text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50"
+              : "text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-50"
+          }
+        >
           HireHub
         </h1>
 
